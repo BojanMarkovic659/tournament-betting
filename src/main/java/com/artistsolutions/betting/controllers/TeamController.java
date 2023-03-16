@@ -1,6 +1,7 @@
 package com.artistsolutions.betting.controllers;
 
 import com.artistsolutions.betting.dto.Team;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
