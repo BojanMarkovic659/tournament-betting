@@ -1,6 +1,6 @@
 package com.artistsolutions.betting.dto;
 
-public class Team {
+public class TeamDTO {
     private int id;
     private String name;
 
