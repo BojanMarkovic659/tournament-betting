@@ -3,6 +3,7 @@ import com.artistsolutions.betting.dto.TeamDTO;
 import com.artistsolutions.betting.entity.Team;
 import com.artistsolutions.betting.repository.TeamRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,7 +19,9 @@ public class TeamController {
     @GetMapping()
     public List<TeamDTO> getTeams() {
         List<Team> teams = teamRepository.findAll();
-        return teams.stream().map(team -> modelMapper.map(team,TeamDTO.class)).collect(Collectors.toList());
+        List<TeamDTO> teamDTOS = modelMapper.map(teams,new TypeToken<List<TeamDTO>>(){}.getType());
+        return teamDTOS;
+        //return teams.stream().map(team -> modelMapper.map(team,TeamDTO.class)).collect(Collectors.toList());
     }
 
     @PostMapping("/add")
