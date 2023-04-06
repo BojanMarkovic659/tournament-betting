@@ -1,48 +1,37 @@
 package com.artistsolutions.betting.controllers;
+
 import com.artistsolutions.betting.dto.TeamDTO;
-import com.artistsolutions.betting.entity.Team;
-import com.artistsolutions.betting.repository.TeamRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import com.artistsolutions.betting.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/teams")
 public class TeamController {
 
-    @Autowired private TeamRepository teamRepository;
-    @Autowired private ModelMapper modelMapper;
+    @Autowired
+    private TeamService teamService;
 
     @GetMapping()
     public List<TeamDTO> getTeams() {
-        List<Team> teams = teamRepository.findAll();
-        List<TeamDTO> teamDTOS = modelMapper.map(teams,new TypeToken<List<TeamDTO>>(){}.getType());
-        return teamDTOS;
-        //return teams.stream().map(team -> modelMapper.map(team,TeamDTO.class)).collect(Collectors.toList());
+        return teamService.getTeams();
     }
 
     @PostMapping("/add")
-    public void addTeams(@RequestBody TeamDTO teamDto) {
-        Team team = modelMapper.map(teamDto, Team.class);
-        teamRepository.save(team);
-        System.out.println("Team successfully added: " + team.getName() + ", id: " + team.getId());
+    public void addTeams(@RequestBody TeamDTO teamDTO) {
+        teamService.addTeams(teamDTO);
     }
 
     @PutMapping("/{id}")
     public void updateTeam(@PathVariable int id, @RequestBody TeamDTO teamDTO) {
-        Team existingTeam = teamRepository.findById(id).get();
-        modelMapper.map(teamDTO,existingTeam);
-        Team updatedTeam = teamRepository.save(existingTeam);
-
-        System.out.println("Team successfully update, id: " + id + ", name: " + teamDTO.getName());
+        teamService.updateTeam(id, teamDTO);
     }
 
     @DeleteMapping("/{id}")
     public void deleteTeam(@PathVariable int id) {
-        teamRepository.deleteById(id);
-        System.out.println("Team is successfully deleted, id: " + id);
+        teamService.deleteTeam(id);
     }
 }
